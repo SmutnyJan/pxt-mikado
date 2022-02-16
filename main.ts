@@ -11,7 +11,6 @@ input.onButtonPressed(Button.A, function () {
     }
 })
 let isGuarding = false
-let isGuardingReference = false
 let toleration = 100
 basic.showIcon(IconNames.Happy)
 basic.forever(function () {
