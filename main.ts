@@ -10,6 +10,7 @@ input.onButtonPressed(Button.A, function () {
 let isGuarding = false
 Mikado.VychoziNastaveni(90)
 basic.forever(function () {
+    serial.writeLine("" + (input.acceleration(Dimension.Strength)))
     if (Mikado.StavHlidani() && isGuarding) {
         Mikado.VzbuditHlidace()
     }
