@@ -10,7 +10,8 @@
     "files": [
         "README.md",
         "main.blocks",
-        "main.ts"
+        "main.ts",
+        "mikado.ts"
     ],
     "testFiles": [
         "test.ts"
