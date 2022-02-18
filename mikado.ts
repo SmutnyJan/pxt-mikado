@@ -41,7 +41,7 @@ namespace Mikado {
     //% block="Detekuj pohyb s tolerancí %tolerance"
 
     export function DetekovatPohyb(tolerance: number): boolean {
-        if (input.acceleration(Dimension.Strength) + tolerance < 1050 || input.acceleration(Dimension.Strength) - tolerance > 1050) {
+        if (input.acceleration(Dimension.Strength) + tolerance < 1023 || input.acceleration(Dimension.Strength) - tolerance > 1023) {
             return true
         }
         return false
