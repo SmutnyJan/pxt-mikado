@@ -1,15 +1,15 @@
-let isGuarding = false
+let jeZapnutoHlidani = false
 input.onButtonPressed(Button.A, function () {
-    if (isGuarding == false) {
+    if (jeZapnutoHlidani == false) {
         Mikado.ZapnoutHlidani()
-        isGuarding = true
+        jeZapnutoHlidani = true
     } else {
         Mikado.VypnoutHlidani()
-        isGuarding = false
+        jeZapnutoHlidani = false
     }
 })
 basic.forever(function () {
-    if (Mikado.DetekovatPohyb(100) == true && isGuarding == true) {
+    if (Mikado.DetekovatPohyb(100) == true && jeZapnutoHlidani == true) {
         Mikado.VzbuditHlidace()
     }
 })
