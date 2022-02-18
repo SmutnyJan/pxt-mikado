@@ -1,3 +1,4 @@
+let isGuarding = false
 input.onButtonPressed(Button.A, function () {
     if (isGuarding == false) {
         Mikado.ZapnoutHlidani()
@@ -7,11 +8,8 @@ input.onButtonPressed(Button.A, function () {
         isGuarding = false
     }
 })
-let isGuarding = false
-Mikado.VychoziNastaveni(90)
 basic.forever(function () {
-    serial.writeLine("" + (input.acceleration(Dimension.Strength)))
-    if (Mikado.StavHlidani() && isGuarding) {
+    if (Mikado.DetekovatPohyb(100) == true && isGuarding == true) {
         Mikado.VzbuditHlidace()
     }
 })

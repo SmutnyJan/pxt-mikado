@@ -9,17 +9,7 @@
  */
 //% weight=100 color=#3bccc0 icon="\uf11b"
 namespace Mikado {
-
-    let toleration = 100
     let isGuarding = false
-    /**
-    * Nastaví toleranci
-    */
-    //% block="Nastav toleranci %tolerance"
-
-    export function VychoziNastaveni(tolerance: number): void {
-        toleration = tolerance
-    }
 
     /**
     * Zapne hlídání
@@ -46,12 +36,12 @@ namespace Mikado {
     }
 
     /**
-    * Vrátí true/false podle toho, jestli došlo k porušení hlídání
+    * Vrátí true/false podle toho, jestli došlo k pohnutí s microbitem
     */
-    //% block="Stav hlídání"
+    //% block="Detekuj pohyb s tolerancí %tolerance"
 
-    export function StavHlidani(): boolean {
-        if (input.acceleration(Dimension.Strength) + toleration < 1050 || input.acceleration(Dimension.Strength) - toleration > 1050) {
+    export function DetekovatPohyb(tolerance: number): boolean {
+        if (input.acceleration(Dimension.Strength) + tolerance < 1050 || input.acceleration(Dimension.Strength) - tolerance > 1050) {
             return true
         }
         return false
