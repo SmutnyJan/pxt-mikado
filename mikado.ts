@@ -10,6 +10,7 @@
 //% weight=100 color=#3bccc0 icon="\uf11b"
 namespace Mikado {
     let isGuarding = false
+    let wakeUpLock = false
 
     /**
     * Zapne hlídání
@@ -17,8 +18,6 @@ namespace Mikado {
     //% block="Zapni hlídání"
 
     export function ZapnoutHlidani(): void {
-        music.setBuiltInSpeakerEnabled(true)
-        basic.pause(2500)
         basic.showIcon(IconNames.Asleep)
         isGuarding = true
     }
@@ -29,23 +28,11 @@ namespace Mikado {
     //% block="Vypni hlídání"
 
     export function VypnoutHlidani(): void {
-        music.setBuiltInSpeakerEnabled(false)
         basic.showIcon(IconNames.Happy)
         isGuarding = false
 
     }
 
-    /**
-    * Vrátí true/false podle toho, jestli došlo k pohnutí s microbitem
-    */
-    //% block="Detekuj pohyb s tolerancí %tolerance"
-
-    export function DetekovatPohyb(tolerance: number): boolean {
-        if (input.acceleration(Dimension.Strength) + tolerance < 1023 || input.acceleration(Dimension.Strength) - tolerance > 1023) {
-            return true
-        }
-        return false
-    }
 
     /**
     * Vzbudí hlídače
@@ -53,13 +40,42 @@ namespace Mikado {
     //% block="Vzbuď hlídače"
 
     export function VzbuditHlidace(): void {
-        basic.showIcon(IconNames.Angry)
-        soundExpression.sad.playUntilDone()
-        if (!(isGuarding)) {
-            basic.showIcon(IconNames.Happy)
-        } else {
-            basic.showIcon(IconNames.Asleep)
+
+        if(wakeUpLock == false) {
+            wakeUpLock = true
+            basic.showIcon(IconNames.Angry)
+            soundExpression.sad.playUntilDone()
+            if (!(isGuarding)) {
+                basic.showIcon(IconNames.Happy)
+            } else {
+                basic.showIcon(IconNames.Asleep)
+            }
+            wakeUpLock = false
         }
+    }
+
+    /**
+    * Zkontroluje, jestli nedošlo k pohybu
+    */
+    //% block="Při probuzení hlídače s tolerancí %tol"
+    export function onGuardAwaken(tolerance: number, action: () => void) {
+        const myEventID = 111 + Math.randomRange(0, 100); // semi-unique
+
+        control.onEvent(myEventID, 0, function () {
+            control.inBackground(() => {
+                action()
+            })
+        })
+
+        control.inBackground(() => {
+            while (true) {
+                let acceleration = input.acceleration(Dimension.Strength);
+                if (acceleration + tolerance < 1023 || acceleration - tolerance > 1023) {
+                    control.raiseEvent(myEventID, 1)
+                }
+                basic.pause(20)
+            }
+        })
     }
 
 }

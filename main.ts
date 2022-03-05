@@ -8,8 +8,8 @@ input.onButtonPressed(Button.A, function () {
         jeZapnutoHlidani = false
     }
 })
-basic.forever(function () {
-    if (Mikado.DetekovatPohyb(100) == true && jeZapnutoHlidani == true) {
+Mikado.onGuardAwaken(100, function () {
+    if (jeZapnutoHlidani == true) {
         Mikado.VzbuditHlidace()
     }
 })
