@@ -57,7 +57,7 @@ namespace Mikado {
     /**
     * Zkontroluje, jestli nedošlo k pohybu
     */
-    //% block="Při probuzení hlídače s tolerancí %tol"
+    //% block="Při porušení senzoru s tolerancí %tol"
     export function onGuardAwaken(tolerance: number, action: () => void) {
         const myEventID = 111 + Math.randomRange(0, 100); // semi-unique
 
