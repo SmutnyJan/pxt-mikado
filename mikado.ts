@@ -12,6 +12,8 @@ namespace Mikado {
     let isGuarding = false
     let wakeUpLock = false
 
+    let actionLock = false;
+
     /**
     * Zapne hlídání
     */
@@ -63,14 +65,16 @@ namespace Mikado {
 
         control.onEvent(myEventID, 0, function () {
             control.inBackground(() => {
+                actionLock = true
                 action()
+                actionLock = false
             })
         })
 
         control.inBackground(() => {
             while (true) {
                 let acceleration = input.acceleration(Dimension.Strength);
-                if (acceleration + tolerance < 1023 || acceleration - tolerance > 1023) {
+                if (!actionLock && (acceleration + tolerance < 1023 || acceleration - tolerance > 1023)) {
                     control.raiseEvent(myEventID, 1)
                 }
                 basic.pause(20)

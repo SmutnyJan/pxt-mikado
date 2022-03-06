@@ -1,15 +1,42 @@
 let jeZapnutoHlidani = false
+let jeProvadenaAkce = false
 input.onButtonPressed(Button.A, function () {
     if (jeZapnutoHlidani == false) {
-        Mikado.zapnoutHlidani()
         jeZapnutoHlidani = true
     } else {
-        Mikado.vypnoutHlidani()
         jeZapnutoHlidani = false
     }
 })
 Mikado.onGuardAwaken(100, function () {
+    jeProvadenaAkce = true
     if (jeZapnutoHlidani == true) {
-        Mikado.vzbuditHlidace()
+        basic.showLeds(`
+            # . . . #
+            . # . # .
+            . . . . .
+            . # # # .
+            # . . . #
+            `)
+        soundExpression.sad.playUntilDone()
+    }
+    jeProvadenaAkce = false
+})
+basic.forever(function () {
+    if (!(jeZapnutoHlidani)) {
+        basic.showLeds(`
+            . # . # .
+            . # . # .
+            . . . . .
+            # . . . #
+            . # # # .
+            `)
+    } else if (jeZapnutoHlidani && !(jeProvadenaAkce)) {
+        basic.showLeds(`
+            # # . # #
+            . . . . .
+            . . . . .
+            . . . . .
+            # # # # #
+            `)
     }
 })
