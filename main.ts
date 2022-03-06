@@ -11,6 +11,7 @@ input.onButtonPressed(Button.A, function () {
 Mikado.onGuardAwaken(100, function () {
     if (jeZapnutoHlidani == true) {
         jeProvadenaAkce = true
+        stavDispleje = "nastvany"
         basic.showLeds(`
             # . . . #
             . # . # .
