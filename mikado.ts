@@ -9,52 +9,7 @@
  */
 //% weight=100 color=#3bccc0 icon="\uf11b"
 namespace Mikado {
-    let isGuarding = false
-    let wakeUpLock = false
-
     let actionLock = false;
-
-    /**
-    * Zapne hlídání
-    */
-    //% block="Zapni hlídání"
-
-    export function zapnoutHlidani(): void {
-        basic.showIcon(IconNames.Asleep)
-        isGuarding = true
-    }
-
-    /**
-    * Vypne hlídání
-    */
-    //% block="Vypni hlídání"
-
-    export function vypnoutHlidani(): void {
-        basic.showIcon(IconNames.Happy)
-        isGuarding = false
-
-    }
-
-
-    /**
-    * Vzbudí hlídače
-    */
-    //% block="Vzbuď hlídače"
-
-    export function vzbuditHlidace(): void {
-
-        if(wakeUpLock == false) {
-            wakeUpLock = true
-            basic.showIcon(IconNames.Angry)
-            soundExpression.sad.playUntilDone()
-            if (!(isGuarding)) {
-                basic.showIcon(IconNames.Happy)
-            } else {
-                basic.showIcon(IconNames.Asleep)
-            }
-            wakeUpLock = false
-        }
-    }
 
     /**
     * Zkontroluje, jestli nedošlo k pohybu
@@ -75,6 +30,7 @@ namespace Mikado {
             while (true) {
                 let acceleration = input.acceleration(Dimension.Strength);
                 if (!actionLock && (acceleration + tolerance < 1023 || acceleration - tolerance > 1023)) {
+                    serial.writeLine("action")
                     control.raiseEvent(myEventID, 1)
                 }
                 basic.pause(20)

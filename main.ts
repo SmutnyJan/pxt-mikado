@@ -1,5 +1,6 @@
 let jeZapnutoHlidani = false
 let jeProvadenaAkce = false
+let stavDispleje = ""
 input.onButtonPressed(Button.A, function () {
     if (jeZapnutoHlidani == false) {
         jeZapnutoHlidani = true
@@ -8,8 +9,9 @@ input.onButtonPressed(Button.A, function () {
     }
 })
 Mikado.onGuardAwaken(100, function () {
-    jeProvadenaAkce = true
     if (jeZapnutoHlidani == true) {
+        jeProvadenaAkce = true
+        stavDispleje = "nastvany"
         basic.showLeds(`
             # . . . #
             . # . # .
@@ -18,11 +20,13 @@ Mikado.onGuardAwaken(100, function () {
             # . . . #
             `)
         soundExpression.sad.playUntilDone()
+        jeProvadenaAkce = false
     }
-    jeProvadenaAkce = false
 })
 basic.forever(function () {
-    if (!(jeZapnutoHlidani)) {
+    serial.writeLine(stavDispleje)
+    if (!(jeZapnutoHlidani) && stavDispleje != "vesely") {
+        stavDispleje = "vesely"
         basic.showLeds(`
             . # . # .
             . # . # .
@@ -30,7 +34,8 @@ basic.forever(function () {
             # . . . #
             . # # # .
             `)
-    } else if (jeZapnutoHlidani && !(jeProvadenaAkce)) {
+    } else if (jeZapnutoHlidani && !(jeProvadenaAkce) && stavDispleje != "pozor") {
+        stavDispleje = "pozor"
         basic.showLeds(`
             # # . # #
             . . . . .
