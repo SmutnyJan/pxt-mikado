@@ -8,7 +8,7 @@ input.onButtonPressed(Button.A, function () {
         jeZapnutoHlidani = false
     }
 })
-Mikado.onGuardAwaken(100, function () {
+Mikado.kdyzJeVzbuzenHlidac(100, function () {
     if (jeZapnutoHlidani == true) {
         jeProvadenaAkce = true
         stavDispleje = "nastvany"
