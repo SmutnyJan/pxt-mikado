@@ -7,7 +7,7 @@ namespace Mikado {
     * @tolerance Tolerance akcelerace
     * @akce Příkazy, které se provedou při moc velké/malé akceleraci
     */
-    //% block="Při porušení senzoru s tolerancí %tol"
+    //% block="Při porušení senzoru s tolerancí %tolerance"
     export function kdyzJeVzbuzenHlidac(tolerance: number, akce: () => void) {
         const eventID = 111 + Math.randomRange(0, 100); // semi-unique
 
