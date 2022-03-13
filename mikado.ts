@@ -13,7 +13,7 @@ namespace Mikado {
     * @obtiznost Obtížnost hry
     * @akce Příkazy, které se provedou při moc velké/malé akceleraci
     */
-    //% block="Při porušení senzoru s obtížnost %obtiznost"
+    //% block="Při porušení senzoru s obtížností %obtiznost"
     export function kdyzJeVzbuzenHlidac(obtiznost: Difficulty, akce: () => void) {
         const eventID = 111 + Math.randomRange(0, 100);
 
