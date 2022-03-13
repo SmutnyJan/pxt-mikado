@@ -1,14 +1,7 @@
 let jeZapnutoHlidani = false
 let jeProvadenaAkce = false
 let stavDispleje = ""
-input.onButtonPressed(Button.A, function () {
-    if (jeZapnutoHlidani == false) {
-        jeZapnutoHlidani = true
-    } else {
-        jeZapnutoHlidani = false
-    }
-})
-Mikado.kdyzJeVzbuzenHlidac(100, function () {
+Mikado.kdyzJeVzbuzenHlidac(Difficulty.Jednoducha, function () {
     if (jeZapnutoHlidani == true) {
         jeProvadenaAkce = true
         stavDispleje = "nastvany"
@@ -21,6 +14,13 @@ Mikado.kdyzJeVzbuzenHlidac(100, function () {
             `)
         soundExpression.sad.playUntilDone()
         jeProvadenaAkce = false
+    }
+})
+input.onButtonPressed(Button.A, function () {
+    if (jeZapnutoHlidani == false) {
+        jeZapnutoHlidani = true
+    } else {
+        jeZapnutoHlidani = false
     }
 })
 basic.forever(function () {

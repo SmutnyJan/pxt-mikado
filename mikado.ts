@@ -1,15 +1,21 @@
+enum Difficulty {
+    Jednoducha = 500,
+    Stredni = 200,
+    Tezka = 100,
+}
+
 //% weight=100 color=#3bccc0 icon="\uf11b" block="Mikado"
 namespace Mikado {
     let zamekAkce = false;
 
     /**
     * Zkontroluje, jestli nedošlo k pohybu
-    * @tolerance Tolerance akcelerace
+    * @obtiznost Obtížnost hry
     * @akce Příkazy, které se provedou při moc velké/malé akceleraci
     */
-    //% block="Při porušení senzoru s tolerancí %tolerance"
-    export function kdyzJeVzbuzenHlidac(tolerance: number, akce: () => void) {
-        const eventID = 111 + Math.randomRange(0, 100); // semi-unique
+    //% block="Při porušení senzoru s obtížnost %obtiznost"
+    export function kdyzJeVzbuzenHlidac(obtiznost: Difficulty, akce: () => void) {
+        const eventID = 111 + Math.randomRange(0, 100);
 
         control.onEvent(eventID, 0, function () {
             control.inBackground(() => {
@@ -22,7 +28,8 @@ namespace Mikado {
         control.inBackground(() => {
             while (true) {
                 let akcelerace = input.acceleration(Dimension.Strength);
-                if (!zamekAkce && (akcelerace + tolerance < 1023 || akcelerace - tolerance > 1023)) {
+                serial.writeLine("" + akcelerace)
+                if (!zamekAkce && (akcelerace + obtiznost < 1023 || akcelerace - obtiznost > 1023)) {
                     control.raiseEvent(eventID, 1)
                 }
                 basic.pause(20)
