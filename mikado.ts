@@ -5,31 +5,30 @@ enum Difficulty {
 }
 
 //% weight=100 color=#3bccc0 icon="\uf11b" block="Mikado"
-namespace Mikado {
-    let zamekAkce = false;
+namespace mikado {
+    let methodLock = false;
 
     /**
     * Zkontroluje, jestli nedošlo k pohybu
-    * @obtiznost Obtížnost hry
-    * @akce Příkazy, které se provedou při moc velké/malé akceleraci
+    * @difficulty Obtížnost hry
+    * @action Příkazy, které se provedou při moc velké/malé akceleraci
     */
-    //% block="Při porušení senzoru s obtížností %obtiznost"
-    export function kdyzJeVzbuzenHlidac(obtiznost: Difficulty, akce: () => void) {
+    //% block="Při porušení senzoru s obtížností %difficulty"
+    export function onGuardAwaken(difficulty: Difficulty, action: () => void) {
         const eventID = 111 + Math.randomRange(0, 100);
 
         control.onEvent(eventID, 0, function () {
             control.inBackground(() => {
-                zamekAkce = true
-                akce()
-                zamekAkce = false
+                methodLock = true
+                action()
+                methodLock = false
             })
         })
 
         control.inBackground(() => {
             while (true) {
-                let akcelerace = input.acceleration(Dimension.Strength);
-                serial.writeLine("" + akcelerace)
-                if (!zamekAkce && (akcelerace + obtiznost < 1023 || akcelerace - obtiznost > 1023)) {
+                let acceleration = input.acceleration(Dimension.Strength);
+                if (!methodLock && (acceleration + difficulty < 1023 || acceleration - difficulty > 1023)) {
                     control.raiseEvent(eventID, 1)
                 }
                 basic.pause(20)
