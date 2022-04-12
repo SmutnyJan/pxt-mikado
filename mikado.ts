@@ -9,6 +9,15 @@ namespace mikado {
     let methodLock = false;
 
     /**
+    * Vrátí klidovou hodnotu senzoru
+    */
+    //% block="Klidová hodnota"
+
+    export function normalValue(): number {
+        return 1023
+    }
+
+    /**
     * Zkontroluje, jestli nedošlo k pohybu
     * @difficulty Obtížnost hry
     * @action Příkazy, které se provedou při moc velké/malé akceleraci
