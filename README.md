@@ -1,31 +1,155 @@
+# Mikádo
 
-> Otevřít tuto stránku v aplikaci [https://smutnyjan.github.io/pxt-mikado/](https://smutnyjan.github.io/pxt-mikado/)
+## Namespace
+```
+mikado
+```
+## Popis
+Simulace hry mikádo.
+ 
+## Metody
+#### Klidová hodnota
+```
+function normalValue(): number
+```
+- Vrátí klidovou hodnotu senzoru (číslo 1023)
+- Bez parametrů
+- Bez návratové hodnoty
 
-## Použít jako rozšíření
+#### Při porušení senzoru s obtížnost %obtiznost
+```
+function onGuardAwaken(difficulty: Difficulty, action: () => void)
+```
+- Zkontroluje, jestli nedošlo k pohybu
+- Parametry:
+    - obtížnost (enum)
+    - metoda
+- Bez návratové hodnoty
 
-Toto úložiště lze přidat jako **rozšíření** v aplikaci MakeCode.
+## Enumy
+```
+enum Difficulty {
+    Easy = 500,
+    Medium = 200,
+    Hard = 100,
+}
+```
 
-* otevřít [https://makecode.microbit.org/](https://makecode.microbit.org/)
-* klikněte na možnost **Nový projekt**
-* klikněte na možnost **Rozšíření** v nabídce s ozubeným kolem
-* vyhledat **https://github.com/smutnyjan/pxt-mikado** a importovat
+## Příklady
 
-## Upravit tento projekt ![Odznak stavu sestavení](https://github.com/smutnyjan/pxt-mikado/workflows/MakeCode/badge.svg)
+### Mikádo s použitím eventu
 
-Slouží k úpravě tohoto úložiště v aplikaci MakeCode.
+#### Bloky
+![Jednoduchý příklad](https://github.com/SmutnyJan/pxt-mikado/blob/master/images/easyexample.png)
 
-* otevřít [https://makecode.microbit.org/](https://makecode.microbit.org/)
-* klikněte na možnost **Import** a poté na **Import adresy URL**
-* vložte **https://github.com/smutnyjan/pxt-mikado** a klikněte na možnost import
+#### Kód
+```
+let jeZapnutoHlidani = false
+let jeProvadenaAkce = false
+let stavDispleje = ""
+mikado.onGuardAwaken(Difficulty.Easy, function () {
+    if (jeZapnutoHlidani == true) {
+        jeProvadenaAkce = true
+        stavDispleje = "nastvany"
+        basic.showLeds(`
+            # . . . #
+            . # . # .
+            . . . . .
+            . # # # .
+            # . . . #
+            `)
+        soundExpression.sad.playUntilDone()
+        jeProvadenaAkce = false
+    }
+})
+input.onButtonPressed(Button.A, function () {
+    if (jeZapnutoHlidani == false) {
+        jeZapnutoHlidani = true
+    } else {
+        jeZapnutoHlidani = false
+    }
+})
+basic.forever(function () {
+    serial.writeLine(stavDispleje)
+    if (!(jeZapnutoHlidani) && stavDispleje != "vesely") {
+        stavDispleje = "vesely"
+        basic.showLeds(`
+            . # . # .
+            . # . # .
+            . . . . .
+            # . . . #
+            . # # # .
+            `)
+    } else if (jeZapnutoHlidani && !(jeProvadenaAkce) && stavDispleje != "pozor") {
+        stavDispleje = "pozor"
+        basic.showLeds(`
+            # # . # #
+            . . . . .
+            . . . . .
+            . . . . .
+            # # # # #
+            `)
+    }
+})
+```
 
-## Náhled bloků
+### Mikádo s použitím vlastní metody
 
-Tento obrázek znázorňuje kód z Bloků od posledního potvrzení v hlavní verzi.
-Tento obrázek se může aktualizovat až za několik minut.
+#### Bloky
+![Těžší příklad](https://github.com/SmutnyJan/pxt-mikado/blob/master/images/hardexample.png)
 
-![Vykreslený náhled bloků](https://github.com/smutnyjan/pxt-mikado/raw/master/.github/makecode/blocks.png)
 
-#### Metadata (slouží k vyhledávání, vykreslování)
+#### Kód
+```
+let jeZapnutoHlidani = false
+let akcelerace = 0
+let stavDisleje = ""
+input.onButtonPressed(Button.A, function () {
+    if (jeZapnutoHlidani == false) {
+        jeZapnutoHlidani = true
+    } else {
+        jeZapnutoHlidani = false
+    }
+})
+function detekujPohyb (tolerance: number) {
+    akcelerace = input.acceleration(Dimension.Strength)
+    if (akcelerace + tolerance < mikado.normalValue() || akcelerace - tolerance > mikado.normalValue()) {
+        return true
+    } else {
+        return false
+    }
+}
+basic.forever(function () {
+    if (detekujPohyb(100) == true && jeZapnutoHlidani && stavDisleje != "nastvany") {
+        stavDisleje = "nastvany"
+        basic.showLeds(`
+            # . . . #
+            . # . # .
+            . . . . .
+            . # # # .
+            # . . . #
+            `)
+        soundExpression.sad.playUntilDone()
+    } else if (jeZapnutoHlidani && stavDisleje != "pozor") {
+        stavDisleje = "pozor"
+        basic.showLeds(`
+            # # . # #
+            . . . . .
+            . . . . .
+            . . . . .
+            # # # # #
+            `)
+    } else if (!(jeZapnutoHlidani) && stavDisleje != "stastny") {
+        stavDisleje = "stastny"
+        basic.showLeds(`
+            . # . # .
+            . # . # .
+            . . . . .
+            # . . . #
+            . # # # .
+            `)
+    }
+})
+```
 
-* for PXT/microbit
-<script src="https://makecode.com/gh-pages-embed.js"></script><script>makeCodeRender("{{ site.makecode.home_url }}", "{{ site.github.owner_name }}/{{ site.github.repository_name }}");</script>
+
