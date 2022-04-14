@@ -102,26 +102,12 @@ basic.forever(function () {
 #### Kód
 ```
 let jeZapnutoHlidani = false
-let akcelerace = 0
-let stavDisleje = ""
-input.onButtonPressed(Button.A, function () {
-    if (jeZapnutoHlidani == false) {
-        jeZapnutoHlidani = true
-    } else {
-        jeZapnutoHlidani = false
-    }
-})
-function detekujPohyb (tolerance: number) {
-    akcelerace = input.acceleration(Dimension.Strength)
-    if (akcelerace + tolerance < mikado.normalValue() || akcelerace - tolerance > mikado.normalValue()) {
-        return true
-    } else {
-        return false
-    }
-}
-basic.forever(function () {
-    if (detekujPohyb(100) == true && jeZapnutoHlidani && stavDisleje != "nastvany") {
-        stavDisleje = "nastvany"
+let jeProvadenaAkce = false
+let stavDispleje = ""
+mikado.onGuardAwaken(Difficulty.Easy, function () {
+    if (jeZapnutoHlidani == true) {
+        jeProvadenaAkce = true
+        stavDispleje = "nastvany"
         basic.showLeds(`
             # . . . #
             . # . # .
@@ -130,23 +116,35 @@ basic.forever(function () {
             # . . . #
             `)
         soundExpression.sad.playUntilDone()
-    } else if (jeZapnutoHlidani && stavDisleje != "pozor") {
-        stavDisleje = "pozor"
-        basic.showLeds(`
-            # # . # #
-            . . . . .
-            . . . . .
-            . . . . .
-            # # # # #
-            `)
-    } else if (!(jeZapnutoHlidani) && stavDisleje != "stastny") {
-        stavDisleje = "stastny"
+        jeProvadenaAkce = false
+    }
+})
+input.onButtonPressed(Button.A, function () {
+    if (jeZapnutoHlidani == false) {
+        jeZapnutoHlidani = true
+    } else {
+        jeZapnutoHlidani = false
+    }
+})
+basic.forever(function () {
+    serial.writeLine(stavDispleje)
+    if (!(jeZapnutoHlidani) && stavDispleje != "vesely") {
+        stavDispleje = "vesely"
         basic.showLeds(`
             . # . # .
             . # . # .
             . . . . .
             # . . . #
             . # # # .
+            `)
+    } else if (jeZapnutoHlidani && !(jeProvadenaAkce) && stavDispleje != "pozor") {
+        stavDispleje = "pozor"
+        basic.showLeds(`
+            # # . # #
+            . . . . .
+            . . . . .
+            . . . . .
+            # # # # #
             `)
     }
 })
