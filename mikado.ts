@@ -1,7 +1,10 @@
 enum Difficulty {
-    Jednoducha = 500,
-    Stredni = 200,
-    Tezka = 100,
+    //% block="Jednoduchá"
+    Easy = 500,
+    //% block="Střední"
+    Medium = 200,
+    //% block="Těžká"
+    Hard = 100,
 }
 
 //% weight=100 color=#3bccc0 icon="\uf11b" block="Mikado"

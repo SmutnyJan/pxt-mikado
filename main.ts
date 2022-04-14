@@ -1,7 +1,7 @@
 let jeZapnutoHlidani = false
 let jeProvadenaAkce = false
 let stavDispleje = ""
-mikado.onGuardAwaken(Difficulty.Jednoducha, function () {
+mikado.onGuardAwaken(Difficulty.Easy, function () {
     if (jeZapnutoHlidani == true) {
         jeProvadenaAkce = true
         stavDispleje = "nastvany"
